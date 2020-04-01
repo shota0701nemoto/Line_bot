@@ -1,0 +1,15 @@
+current directory: /Users/shogo/environment/Line_bot/vendor/bundle/ruby/2.6.0/gems/bindex-0.8.1/ext/skiptrace
+/Users/shogo/.rbenv/versions/2.6.3/bin/ruby -I /Users/shogo/.rbenv/versions/2.6.3/lib/ruby/2.6.0 -r ./siteconf20200401-48300-fpmsue.rb extconf.rb
+creating Makefile
+
+current directory: /Users/shogo/environment/Line_bot/vendor/bundle/ruby/2.6.0/gems/bindex-0.8.1/ext/skiptrace
+make "DESTDIR=" clean
+
+current directory: /Users/shogo/environment/Line_bot/vendor/bundle/ruby/2.6.0/gems/bindex-0.8.1/ext/skiptrace
+make "DESTDIR="
+compiling cruby.c
+linking shared-object skiptrace/internal/cruby.bundle
+
+current directory: /Users/shogo/environment/Line_bot/vendor/bundle/ruby/2.6.0/gems/bindex-0.8.1/ext/skiptrace
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 cruby.bundle ./.gem.20200401-48300-35f10v/skiptrace/internal
