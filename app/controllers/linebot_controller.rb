@@ -44,36 +44,8 @@ class LinebotController < ApplicationController
           client.reply_message(event['replyToken'], message)
         end
       end
-    end
-  }
-
-  head :ok
-end
-
-private
-
-def template
-  {
-    "type": "template",
-    "altText": "this is a confirm template",
-    "template": {
-      "type": "confirm",
-      "text": "ジム行く？",
-      "actions": [
-        {
-          "type": "message",
-          # Botから送られてきたメッセージに表示される文字列です。
-          "label": "はい",
-          # ボタンを押した時にBotに送られる文字列です。
-          "text": "はい"
-        },
-        {
-          "type": "message",
-          "label": "はい",
-          "text": "はい"
-        }
-      ]
     }
-  }
-end
+
+    head :ok
+  end
 end
