@@ -1,6 +1,7 @@
 class LinebotController < ApplicationController
   require 'line/bot'
 
+  # callbackアクションのCSRFトークン認証を無効
   protect_from_forgery :except => [:callback]
 
   def client
@@ -11,6 +12,9 @@ class LinebotController < ApplicationController
   end
 
   def callback
+
+    # Postモデルの中身をランダムで@postに格納する
+    @post=Post.offset( rand(Post.count) ).first
     body = request.body.read
 
     signature = request.env['HTTP_X_LINE_SIGNATURE']
@@ -21,46 +25,55 @@ class LinebotController < ApplicationController
     events = client.parse_events_from(body)
 
     events.each { |event|
+
+      # event.message['text']でLINEで送られてきた文書を取得
+      if event.message['text'].include?("ジム")
+        response = "ジム行く？"
+      else
+        response = @post.name
+      end
+
       case event
       when Line::Bot::Event::Message
         case event.type
         when Line::Bot::Event::MessageType::Text
-          # LINEから送られてきたメッセージが「疲れた」と一致するかチェック
-          if event.message['text'].eql?('疲れた')
-            # private内のtemplateメソッドを呼び出します。
-            client.reply_message(event['replyToken'], template)
-          end
+          message = {
+            type: 'text',
+            text: response
+          }
+          client.reply_message(event['replyToken'], template)
         end
       end
+    end
+  }
+
+  head :ok
+end
+
+private
+
+def template
+  {
+    "type": "template",
+    "altText": "this is a confirm template",
+    "template": {
+      "type": "confirm",
+      "text": "ジム行く？",
+      "actions": [
+        {
+          "type": "message",
+          # Botから送られてきたメッセージに表示される文字列です。
+          "label": "はい",
+          # ボタンを押した時にBotに送られる文字列です。
+          "text": "はい"
+        },
+        {
+          "type": "message",
+          "label": "はい",
+          "text": "はい"
+        }
+      ]
     }
-
-    head :ok
-  end
-
-  private
-
-  def template
-    {
-      "type": "template",
-      "altText": "this is a confirm template",
-      "template": {
-          "type": "confirm",
-          "text": "ジム行く？",
-          "actions": [
-              {
-                "type": "message",
-                # Botから送られてきたメッセージに表示される文字列です。
-                "label": "はい",
-                # ボタンを押した時にBotに送られる文字列です。
-                "text": "はい"
-              },
-              {
-                "type": "message",
-                "label": "いいえ",
-                "text": "いいえ"
-              }
-          ]
-      }
-    }
-  end
+  }
+end
 end
